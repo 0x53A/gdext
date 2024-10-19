@@ -388,7 +388,7 @@ where
             #[cfg(debug_assertions)]
             {
                 let inner_msg = extract_panic_message(err);
-                let inner_msg = format_panic_message(msg);
+                let inner_msg = format_panic_message(inner_msg);
 
                 let guard = info.lock().unwrap();
                 let info = guard.as_ref().expect("no panic info available");
