@@ -405,7 +405,7 @@ where
                     //eprintln!("Backtrace:\n{}", info.backtrace);
                 }
     
-                Err(formsg)
+                Err(msg)
             }
 
             #[cfg(not(debug_assertions))]
