@@ -389,25 +389,40 @@ where
             {
                 let guard = info.lock().unwrap();
                 let info = guard.as_ref().expect("no panic info available");
-                if print {
-                    godot_error!(
-                        "Rust function panicked at {}:{}.\n  Context: {}",
+                let msg = format!("Rust function panicked at {}:{}.\n  Context: {}",
                         info.file,
                         info.line,
-                        error_context()
+                        error_context());
+
+                if print {
+                    godot_error!(
+                        "{}", msg
                     );
                     //eprintln!("Backtrace:\n{}", info.backtrace);
                 }
+
+                // let msg = extract_panic_message(err);
+                // let msg = format_panic_message(msg);
+    
+                // if print {
+                //     godot_error!("{msg}");
+                // }
+    
+                Err(msg)
             }
 
-            let msg = extract_panic_message(err);
-            let msg = format_panic_message(msg);
+            #[cfg(not(debug_assertions))]
+            {
 
-            if print {
-                godot_error!("{msg}");
+                let msg = extract_panic_message(err);
+                let msg = format_panic_message(msg);
+    
+                if print {
+                    godot_error!("{msg}");
+                }
+    
+                Err(msg)
             }
-
-            Err(msg)
         }
     }
 }
