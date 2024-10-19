@@ -387,11 +387,15 @@ where
             // Handle panic info only in Debug mode.
             #[cfg(debug_assertions)]
             {
+                let inner_msg = extract_panic_message(err);
+                let inner_msg = format_panic_message(msg);
+
                 let guard = info.lock().unwrap();
                 let info = guard.as_ref().expect("no panic info available");
-                let msg = format!("Rust function panicked at {}:{}.\n  Context: {}",
+                let msg = format!("Rust function panicked at {}:{}.\n{}\n  Context: {}",
                         info.file,
                         info.line,
+                        inner_msg,
                         error_context());
 
                 if print {
@@ -400,15 +404,8 @@ where
                     );
                     //eprintln!("Backtrace:\n{}", info.backtrace);
                 }
-
-                // let msg = extract_panic_message(err);
-                // let msg = format_panic_message(msg);
     
-                // if print {
-                //     godot_error!("{msg}");
-                // }
-    
-                Err(msg)
+                Err(formsg)
             }
 
             #[cfg(not(debug_assertions))]
