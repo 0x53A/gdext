@@ -16,6 +16,8 @@ use quote::{format_ident, quote};
 use std::env;
 use std::sync::atomic::{AtomicU32, Ordering};
 
+// Note: global state in proc-macros may become problematic in the future, see:
+// https://users.rust-lang.org/t/simple-state-in-procedural-macro/68204/2
 static FUNCTION_COUNTER: AtomicU32 = AtomicU32::new(0);
 
 pub(super) fn wasm_declare_init_fn(input: TokenStream) -> ParseResult<TokenStream> {
